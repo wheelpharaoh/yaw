@@ -1,0 +1,6 @@
+# Whatever this thumbnail cache is
+.DS_Store
+
+*.pdf
+__pycache__
+*.log

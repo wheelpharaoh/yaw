@@ -1,0 +1,52 @@
+name: 'cd publish'
+
+on:
+  release:
+    types: [published]
+permissions:
+  pull-requests: write
+  contents: 'read'
+  id-token: 'write'
+
+jobs:
+  cd-prestart:
+    name: 'cd-prestart'
+    runs-on: [self-hosted]
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: 'helm'
+      run: |
+        curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+        sudo apt-get install apt-transport-https --yes
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+        sudo apt-get update
+        sudo apt-get install helm
+  cd:
+    name: 'cd-start'
+    needs: cd-prestart
+    runs-on: [self-hosted]
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: 'tag image'
+      run: |
+        docker build -t yaw:$GITHUB_COMMIT -f ./app/Dockerfile ./app/
+        # docker login && docker push 
+
+    - name: 'publish chart'
+      env:
+        HELM_EXPERIMENTAL_OCI: 1
+      run: |
+        cd pkg/chart
+        #helm chart save . yaw:$GITHUB_COMMIT
+        # helm chart push

@@ -1,0 +1,57 @@
+name: 'ci pr'
+
+on:
+  pull_request:
+    paths:
+      - "app/**"
+      - "pkg/**"
+permissions:
+  pull-requests: write
+  contents: 'read'
+  id-token: 'write'
+
+jobs:
+  pr-prestart:
+    name: 'pr-prestart'
+    runs-on: [self-hosted]
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: 'helm'
+      run: |
+        curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+        sudo apt-get install apt-transport-https --yes
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+        sudo apt-get update
+        sudo apt-get install helm
+
+  pr:
+    name: 'pr-start'
+    needs: pr-prestart
+    runs-on: [self-hosted]
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: 'test'
+      run: |
+        cd app
+        python test_main.py
+
+    - name: 'create image'
+      run: |
+        docker build -f ./app/Dockerfile ./app/
+
+    - name: 'create chart'
+      run: |
+        cd pkg/chart
+        #helm lint . 
+        #helm template .
