@@ -42,12 +42,14 @@ Query for Fibonacci numbers using the following commands:
 
 ```sh
 curl http://$NODE_IP:$NODE_PORT?n=4
+# 0, 1, 1, 2
 ```
 or
 
 ```sh
 docker run --rm --name yaw -p 8000:8000 yaw:0.1.0
 curl localhost:8000?n=4
+# 0, 1, 1, 2
 ```
 
 ## CICD
