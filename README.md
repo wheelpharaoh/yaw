@@ -2,22 +2,22 @@
 yet another webserver
 
 ## patterns
-[X] Documentation
-[X] Style
-[X] Unit Tests
-[X] gitOps
-[X] IaC
-[X] CI
-[X] Packaging
-[X] Containerization
-[X] Multi-Stage Buils
-[X] CD
-[X] k8s
-[X] Observability
-[X] Logs
-[ ] Metrics
-[ ] Dashboards
-[ ] Alerts
+- [X] Documentation
+- [X] Style
+- [X] Unit Tests
+- [X] gitOps
+- [X] IaC
+- [X] CI
+- [X] Packaging
+- [X] Containerization
+- [X] Multi-Stage Buils
+- [X] CD
+- [X] k8s
+- [X] Observability
+- [X] Logs
+- [ ] Metrics
+- [ ] Dashboards
+- [ ] Alerts
 
 ## Installation
 
