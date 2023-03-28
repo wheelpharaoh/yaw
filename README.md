@@ -34,18 +34,21 @@ docker build -t yaw:0.1.0 -f ./app/Dockerfile ./app/
 helm install yaw pkg/chart --values pkg/chart/values.yaml --create-namespace --namespace yaw
 ```
 
-or
-
-```sh
-docker run --rm --name yaw -p 8000:8000 yaw:0.1.0`
-curl localhost:8000?n=4
-```
-
 ## Usage
+
+Simple Fibonacci web server.
+
+Query for Fibonacci numbers using the following commands:
+
 ```sh
 curl http://$NODE_IP:$NODE_PORT?n=4
 ```
+or
 
+```sh
+docker run --rm --name yaw -p 8000:8000 yaw:0.1.0
+curl localhost:8000?n=4
+```
 
 ## CICD
 
